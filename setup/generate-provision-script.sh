@@ -1,0 +1,1 @@
+sed "s/__QT_VERSION__/`cat QT_VERSION.txt`/" setup/provision.sh.template > generated/provision.sh

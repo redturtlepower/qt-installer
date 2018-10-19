@@ -1,0 +1,37 @@
+#!/usr/bin/env bash
+echo "The scripts Setup-buildenv.sh and Setup-devenv.sh replace __QT_VERSION__ with the appropriate version, e.g. '5.11.2' excluding quotes."
+# https://stackoverflow.com/questions/394230/how-to-detect-the-os-from-a-bash-script
+PREFIX=$(cat generated/qtprefix.txt)
+MAJOR=$(cat generated/qt-version-major.txt)
+MINOR=$(cat generated/qt-version-minor.txt)
+PATCH=$(cat generated/qt-version-patch.txt)
+INSTALLER=""
+case "$OSTYPE" in
+  darwin*) 
+    echo "OSX" 
+    INSTALLER=qt-opensource-mac-x64-__QT_VERSION__.dmg
+    ;; 
+  linux*)   
+    echo "LINUX" 
+    INSTALLER=qt-opensource-linux-x64-__QT_VERSION__.run
+    chmod +x installers\\qt-opensource-linux-x64-__QT_VERSION__.run
+    ;;
+  msys*)    
+    echo "WINDOWS"
+    INSTALLER=qt-opensource-windows-x86-__QT_VERSION__.exe
+    ;;
+  solaris*) echo "SOLARIS" ;;
+  bsd*)     echo "BSD" ;;
+  *)        echo "unknown: $OSTYPE" ;;
+esac 
+
+# If the installer is not found, download it!
+if [ ! -f installers\\$INSTALLER ]; then
+    echo "Installer not found! Trying to download..."
+    URL=https://download.qt.io/archive/qt/$MAJOR.$MINOR/$MAJOR.$MINOR.$PATCH/$INSTALLER
+    echo "Downloading from url "$URL
+    curl -o installers/$INSTALLER -sL $URL && \
+    installers\\$INSTALLER --script generated\\qt-installer-noninteractive.qs --verbose
+else
+    installers\\$INSTALLER --script generated\\qt-installer-noninteractive.qs --verbose
+fi
