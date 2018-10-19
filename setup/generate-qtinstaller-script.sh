@@ -16,4 +16,4 @@ echo $(cat generated/QT_PACKAGES.txt)
 # The packages are still missing the base packages which are different depending on the OS!
 # This line replaces __PACKAGES_LIST__ with (example, incl. quotes) "qt.qt5.5112.win32_msvc2015 qt.qt5.5112.qtnetworkauth qt.qt5.5112.qtcharts"
 sed "s/__PACKAGES_LIST__/\"`echo $(cat generated/QT_PACKAGES.txt)`\"/g" \
-generated/qt-installer-noninteractive.qs.template > generated/qt-installer-noninteractive.qs
+setup/qt-installer-noninteractive.qs.template > generated/qt-installer-noninteractive.qs

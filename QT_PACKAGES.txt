@@ -6,8 +6,8 @@ win32_msvc2015
 #win32_mingw53
 android_armv7
 clang_64
-ios
-gcc_64
+#ios
+#gcc_64
 # ====================
 # available packages
 # --------------------
@@ -15,3 +15,7 @@ qtnetworkauth
 #qtpurchasing
 #qtcharts
 #qtwebengine
+#qtdatavis3d
+#qtwebglplugin
+#qtvirtualkeyboard
+#qtscript

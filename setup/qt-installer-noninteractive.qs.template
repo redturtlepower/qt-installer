@@ -106,7 +106,7 @@ Controller.prototype.ComponentSelectionPageCallback = function() {
     var widget = gui.currentPageWidget();
 
     var packageList = __PACKAGES_LIST__; // example: "qt.qt5.5110.win32_msvc2015,qt.qt5.5110.qtnetworkauth";
-    var packages = trim(packageList).split(",");
+    var packages = trim(packageList).split(" ");
     if (packages.length > 0 && packages[0] !== "") {
         widget.deselectAll();
         for (var i in packages) {
