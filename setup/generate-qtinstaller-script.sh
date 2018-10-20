@@ -13,7 +13,6 @@ sed -e 's/^/'"$PREFIX"'/' generated/QT_PACKAGES.txt.tmp > generated/QT_PACKAGES.
 echo $(cat generated/QT_PACKAGES.txt)
 
 # Replace the placeholder in the template file with the generated package list:
-# The packages are still missing the base packages which are different depending on the OS!
 # This line replaces __PACKAGES_LIST__ with (example, incl. quotes) "qt.qt5.5112.win32_msvc2015 qt.qt5.5112.qtnetworkauth qt.qt5.5112.qtcharts"
 sed "s/__PACKAGES_LIST__/\"`echo $(cat generated/QT_PACKAGES.txt)`\"/g" \
 setup/qt-installer-noninteractive.qs.template > generated/qt-installer-noninteractive.qs
