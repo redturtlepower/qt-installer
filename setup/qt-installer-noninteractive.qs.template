@@ -57,7 +57,7 @@ function Controller() {
     log("Controller");
     installer.installationFinished.connect(function() {
 		status.installationFinished = true;
-        gui.clickButton(buttons.NextButton, 10000);
+        gui.clickButton(buttons.NextButton, 3000);
         tryFinish();
     });
     installer.setMessageBoxAutomaticAnswer("OverwriteTargetDirectory", QMessageBox.Yes);
@@ -69,12 +69,12 @@ function Controller() {
 
 Controller.prototype.WelcomePageCallback = function() {
     log("Welcome Page");
-    gui.clickButton(buttons.NextButton, 10000);
+    gui.clickButton(buttons.NextButton, 3000);
 
     var widget = gui.currentPageWidget();
 
     widget.completeChanged.connect(function() {
-        gui.clickButton(buttons.NextButton, 10000);
+        gui.clickButton(buttons.NextButton, 3000);
     });
 }
 
@@ -119,19 +119,18 @@ Controller.prototype.ComponentSelectionPageCallback = function() {
     }
 
     //widget.selectAll();
-    gui.clickButton(buttons.NextButton, 10000);
+    gui.clickButton(buttons.NextButton, 3000);
 }
 
 Controller.prototype.IntroductionPageCallback = function() {
     log("Introduction Page");
     log("Retrieving meta information from remote repository");
-    gui.clickButton(buttons.NextButton, 10000);
+    gui.clickButton(buttons.NextButton, 3000);
 }
 
 
 Controller.prototype.TargetDirectoryPageCallback = function() {
     var version = installer.value("ProductVersion");
-    log("Set target installation page: C:/Qt/"+version);
     var widget = gui.currentPageWidget();
 
     if (widget != null) {
@@ -140,13 +139,14 @@ Controller.prototype.TargetDirectoryPageCallback = function() {
             widget.TargetDirectoryLineEdit.setText("C:/Qt/"+version);
         }
         else if (systemInfo.productType === "osx"){
-            widget.TargetDirectoryLineEdit.setText("~/Qt/"+version);
+            widget.TargetDirectoryLineEdit.setText("/Users/"+$USER+"/Qt/"+version);
         }
         else{
-            widget.TargetDirectoryLineEdit.setText("~/Qt/"+version);
+            widget.TargetDirectoryLineEdit.setText("home/"+$USER+"/Qt/"+version);
         }
     }
-    gui.clickButton(buttons.NextButton, 10000);
+    log("Set target installation page: "+widget.TargetDirectoryLineEdit.text);
+    gui.clickButton(buttons.NextButton, 3000);
 }
 
 Controller.prototype.LicenseAgreementPageCallback = function() {
@@ -156,7 +156,7 @@ Controller.prototype.LicenseAgreementPageCallback = function() {
     if (widget != null) {
         widget.AcceptLicenseRadioButton.setChecked(true);
     }
-    gui.clickButton(buttons.NextButton, 10000);
+    gui.clickButton(buttons.NextButton, 3000);
 }
 
 Controller.prototype.ReadyForInstallationPageCallback = function() {

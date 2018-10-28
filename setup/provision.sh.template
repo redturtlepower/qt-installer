@@ -39,7 +39,7 @@ if [ ! -f installers/$INSTALLER ]; then
             ;;
 	esac 
         # Start the installer in headless mode
-        bash ./installers/$INSTALLER --script generated/qt-installer-noninteractive.qs --verbose -platform minimal
+        ./installers/$INSTALLER --script generated/qt-installer-noninteractive.qs --verbose -platform minimal
     else
         echo "Failed downloading qt installer to expected folder."
     fi
@@ -48,8 +48,8 @@ else
     case "$OSTYPE" in
       linux*) 
         chmod +x ./installers/$INSTALLER 
-        ls -la 
+        ls -la ./installers
         ;;
     esac 
-    bash ./installers/$INSTALLER --script generated/qt-installer-noninteractive.qs --verbose -platform minimal
+    ./installers/$INSTALLER --script generated/qt-installer-noninteractive.qs --verbose -platform minimal
 fi
