@@ -25,24 +25,24 @@ case "$OSTYPE" in
 esac 
 
 # If the installer is not found, download it!
-if [ ! -f $INSTALLER ]; then
+if [ ! -f installers/$INSTALLER ]; then
     echo "Installer not found! Trying to download..."
     URL=https://download.qt.io/archive/qt/$MAJOR.$MINOR/$MAJOR.$MINOR.$PATCH/$INSTALLER
     echo "Downloading from url "$URL
-    curl -o $INSTALLER -sL $URL
-    if [ -f $INSTALLER ]; then
+    curl -o installers/$INSTALLER -sL $URL
+    if [ -f installers/$INSTALLER ]; then
         # Make the installer executable (only needed on linux)
 	case "$OSTYPE" in
 	  linux*) 
+            chmod +x installers/$INSTALLER 
     	    ls -la 
-            sudo chmod +x $INSTALLER 
             ;;
 	esac 
         # Start the installer in headless mode
-        $INSTALLER --script generated/qt-installer-noninteractive.qs --verbose -platform minimal
+        bash installers/$INSTALLER --script generated/qt-installer-noninteractive.qs --verbose -platform minimal
     else
         echo "Failed downloading qt installer to expected folder."
     fi
 else
-    $INSTALLER --script generated/qt-installer-noninteractive.qs --verbose -platform minimal
+    installers/$INSTALLER --script generated/qt-installer-noninteractive.qs --verbose -platform minimal
 fi
