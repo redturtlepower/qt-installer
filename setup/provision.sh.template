@@ -34,15 +34,22 @@ if [ ! -f installers/$INSTALLER ]; then
         # Make the installer executable (only needed on linux)
 	case "$OSTYPE" in
 	  linux*) 
-            chmod +x installers/$INSTALLER 
-    	    ls -la 
+            chmod +x ./installers/$INSTALLER 
+    	    ls -la ./installers
             ;;
 	esac 
         # Start the installer in headless mode
-        bash installers/$INSTALLER --script generated/qt-installer-noninteractive.qs --verbose -platform minimal
+        bash ./installers/$INSTALLER --script generated/qt-installer-noninteractive.qs --verbose -platform minimal
     else
         echo "Failed downloading qt installer to expected folder."
     fi
-else
-    installers/$INSTALLER --script generated/qt-installer-noninteractive.qs --verbose -platform minimal
+else       
+    # Make the installer executable (only needed on linux)
+    case "$OSTYPE" in
+      linux*) 
+        chmod +x ./installers/$INSTALLER 
+        ls -la 
+        ;;
+    esac 
+    bash ./installers/$INSTALLER --script generated/qt-installer-noninteractive.qs --verbose -platform minimal
 fi
