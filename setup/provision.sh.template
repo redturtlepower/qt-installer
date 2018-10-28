@@ -29,9 +29,19 @@ esac
 if [ ! -f installers\\$INSTALLER ]; then
     echo "Installer not found! Trying to download..."
     URL=https://download.qt.io/archive/qt/$MAJOR.$MINOR/$MAJOR.$MINOR.$PATCH/$INSTALLER
-    echo "Downloading from url "$URL
-    curl -o installers/$INSTALLER -sL $URL && \
-    installers\\$INSTALLER --script generated\\qt-installer-noninteractive.qs --verbose
+    echo "Downloading from url "$URL" to file qt_installer.run"
+    #curl -o installers/$INSTALLER -sL $URL
+
+    ls -a ./installers/
+    if [ -f installers\\$INSTALLER ]; then
+        installers/$INSTALLER --script generated/qt-installer-noninteractive.qs --verbose
+    else
+        echo "Failed downloading qt installer to expected folder."
+    fi
+    #curl -o installers/qt_installer.run -sL $URL 
+    #ls -a ./installers/
+    #chmod +x ./installers/qt_installer.run
+    #installers/qt_installer.run --script generated/qt-installer-noninteractive.qs --verbose
 else
     installers\\$INSTALLER --script generated\\qt-installer-noninteractive.qs --verbose
 fi
