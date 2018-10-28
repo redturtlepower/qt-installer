@@ -29,11 +29,13 @@ esac
 if [ ! -f /usr/local/bin/$INSTALLER ]; then
     echo "Installer not found! Trying to download..."
     URL=https://download.qt.io/archive/qt/$MAJOR.$MINOR/$MAJOR.$MINOR.$PATCH/$INSTALLER
+    DIR=/usr/local/bin
     echo "Downloading from url "$URL" to file /usr/local/bin/"$INSTALLER
-    curl -o /usr/local/bin/$INSTALLER -sL $URL
-    ls -a /usr/local/bin/
-    if [ -f /usr/local/bin/$INSTALLER ]; then
-        /usr/local/bin/$INSTALLER --script generated/qt-installer-noninteractive.qs --verbose
+    curl -o $DIR/$INSTALLER -sL $URL
+    ls -a $DIR
+    if [ -f $DIR/$INSTALLER ]; then
+        chmod +x $DIR/$INSTALLER
+        $DIR/$INSTALLER --script generated/qt-installer-noninteractive.qs --verbose
     else
         echo "Failed downloading qt installer to expected folder."
     fi
