@@ -34,8 +34,8 @@ if [ ! -f $INSTALLER ]; then
         # Make the installer executable (only needed on linux)
 	case "$OSTYPE" in
 	  linux*) 
-    	    ls -a 
-            chmod +x $INSTALLER 
+    	    ls -la 
+            sudo chmod +x $INSTALLER 
             ;;
 	esac 
         # Start the installer in headless mode
