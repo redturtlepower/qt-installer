@@ -142,7 +142,7 @@ Controller.prototype.TargetDirectoryPageCallback = function() {
             widget.TargetDirectoryLineEdit.setText("/Users/"+$USER+"/Qt/"+version);
         }
         else{
-            widget.TargetDirectoryLineEdit.setText("home/"+$USER+"/Qt/"+version);
+            widget.TargetDirectoryLineEdit.setText("/home/"+$USER+"/Qt/"+version);
         }
     }
     log("Set target installation page: "+widget.TargetDirectoryLineEdit.text);
