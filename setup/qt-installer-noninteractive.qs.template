@@ -130,22 +130,26 @@ Controller.prototype.IntroductionPageCallback = function() {
 
 
 Controller.prototype.TargetDirectoryPageCallback = function() {
+    log("Target Directory Page");
     var version = installer.value("ProductVersion");
     var widget = gui.currentPageWidget();
 
     if (widget != null) {
         // https://doc.qt.io/qtinstallerframework/scripting-systeminfo.html#productType-prop
+        var dir = ""
         if (systemInfo.productType === "windows") {
-            widget.TargetDirectoryLineEdit.setText("C:/Qt/"+version);
+            dir = "C:/Qt/"+version;
         }
         else if (systemInfo.productType === "osx"){
-            widget.TargetDirectoryLineEdit.setText("/Users/"+$USER+"/Qt/"+version);
+            dir = "/Users/__USER_NAME__/Qt/"+version;
         }
         else{
-            widget.TargetDirectoryLineEdit.setText("/home/"+$USER+"/Qt/"+version);
+            log("Selecting Linux path");
+            dir = "/home/__USER_NAME__/Qt/"+version;
         }
+        widget.TargetDirectoryLineEdit.setText(dir);
+        log("Set target installation dir: "+widget.TargetDirectoryLineEdit.text);
     }
-    log("Set target installation page: "+widget.TargetDirectoryLineEdit.text);
     gui.clickButton(buttons.NextButton, 3000);
 }
 

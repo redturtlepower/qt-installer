@@ -19,3 +19,8 @@ The respective Qt-installers are expected in the directory `installers`.
 If they are not found, they will be downloaded with curl. Make sure curl is installed.
 
 This script can be run on Windows, Linux and Mac. On Windows Git is required to execute bash.
+
+The installation path is set as follows:
+Windows: C:/Qt/5.11.2
+Linux: /home/<user>/Qt/5.11.2
+Mac: /Users/<user>/Qt/5.11.2

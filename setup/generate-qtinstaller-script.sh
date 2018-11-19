@@ -16,3 +16,13 @@ echo $(cat generated/QT_PACKAGES.txt)
 # This line replaces __PACKAGES_LIST__ with (example, incl. quotes) "qt.qt5.5112.win32_msvc2015 qt.qt5.5112.qtnetworkauth qt.qt5.5112.qtcharts"
 sed "s/__PACKAGES_LIST__/\"`echo $(cat generated/QT_PACKAGES.txt)`\"/g" \
 setup/qt-installer-noninteractive.qs.template > generated/qt-installer-noninteractive.qs
+
+# Replace the placeholder in the template file with the current user name:
+# This line replaces __USER_NAME__
+case "$OSTYPE" in
+  darwin*|linux*) 
+    echo "OSX or Linux" 
+	sed -i "s/__USER_NAME__/`echo $(id -u -n)`/g" generated/qt-installer-noninteractive.qs
+    ;; 
+  *) echo "No need to set user name for installation path." ;;
+esac 
