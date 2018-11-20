@@ -22,7 +22,13 @@ setup/qt-installer-noninteractive.qs.template > generated/qt-installer-nonintera
 case "$OSTYPE" in
   darwin*|linux*) 
     echo "OSX or Linux" 
-	sed -i "s/__USER_NAME__/`echo $(id -u -n)`/g" generated/qt-installer-noninteractive.qs
+
+    # Use current user name: Beware, depending on context this might be 'root'!
+	# sed -i "s/__USER_NAME__/`echo $(id -u -n)`/g" generated/qt-installer-noninteractive.qs
+
+	# Use fixed user name 'jenkins':
+	sed -i "s/__USER_NAME__/`echo jenkins`/g" generated/qt-installer-noninteractive.qs
+	
     ;; 
   *) echo "No need to set user name for installation path." ;;
 esac 
