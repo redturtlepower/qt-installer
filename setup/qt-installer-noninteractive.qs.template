@@ -145,7 +145,8 @@ Controller.prototype.TargetDirectoryPageCallback = function() {
         }
         else{
             log("Selecting Linux path");
-            dir = "/home/__USER_NAME__/Qt/"+version;
+            // dir = "/home/__USER_NAME__/Qt/"+version;
+            dir = "/home/root/Qt/"+version;
         }
         widget.TargetDirectoryLineEdit.setText(dir);
         log("Set target installation dir: "+widget.TargetDirectoryLineEdit.text);
