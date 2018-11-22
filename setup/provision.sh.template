@@ -15,7 +15,7 @@ case "$OSTYPE" in
     ;; 
   linux*)   
     echo "LINUX" 
-    INSTALLER_DIR="/home/${USER}/installers/"
+    INSTALLER_DIR="/home/jenkins/installers/"
     INSTALLER=qt-opensource-linux-x64-__QT_VERSION__.run
     ;;
   msys*)    
