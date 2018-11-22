@@ -15,7 +15,7 @@ case "$OSTYPE" in
     ;; 
   linux*)   
     echo "LINUX" 
-    INSTALLER_DIR="/usr/share/installers/"
+    INSTALLER_DIR="/home/${USER}/installers/"
     INSTALLER=qt-opensource-linux-x64-__QT_VERSION__.run
     ;;
   msys*)    
@@ -31,7 +31,7 @@ esac
 mkdir $INSTALLER_DIR
 # If the installer is not found, download it!
 if [ ! -f $INSTALLER_DIR/$INSTALLER ]; then
-    echo "Installer not found! Trying to download..."
+    echo "Installer not found! Trying to download to dir " $INSTALLER_DIR "..."
     URL=https://download.qt.io/archive/qt/$MAJOR.$MINOR/$MAJOR.$MINOR.$PATCH/$INSTALLER
     echo "Downloading from url "$URL
     curl -o $INSTALLER_DIR/$INSTALLER -sL $URL
