@@ -6,17 +6,21 @@ MAJOR=$(cat generated/qt-version-major.txt)
 MINOR=$(cat generated/qt-version-minor.txt)
 PATCH=$(cat generated/qt-version-patch.txt)
 INSTALLER=""
+INSTALLER_DIR=""
 case "$OSTYPE" in
   darwin*) 
     echo "OSX" 
+    INSTALLER_DIR="/Users/jenkins/Desktop/installers/"
     INSTALLER=qt-opensource-mac-x64-__QT_VERSION__.dmg
     ;; 
   linux*)   
     echo "LINUX" 
+    INSTALLER_DIR="/usr/share/installers/"
     INSTALLER=qt-opensource-linux-x64-__QT_VERSION__.run
     ;;
   msys*)    
     echo "WINDOWS"
+    INSTALLER_DIR="C:/installers/"
     INSTALLER=qt-opensource-windows-x86-__QT_VERSION__.exe
     ;;
   solaris*) echo "SOLARIS" ;;
@@ -25,21 +29,21 @@ case "$OSTYPE" in
 esac 
 
 # If the installer is not found, download it!
-if [ ! -f installers/$INSTALLER ]; then
+if [ ! -f $INSTALLER_DIR/$INSTALLER ]; then
     echo "Installer not found! Trying to download..."
     URL=https://download.qt.io/archive/qt/$MAJOR.$MINOR/$MAJOR.$MINOR.$PATCH/$INSTALLER
     echo "Downloading from url "$URL
-    curl -o installers/$INSTALLER -sL $URL
-    if [ -f installers/$INSTALLER ]; then
+    curl -o $INSTALLER_DIR/$INSTALLER -sL $URL
+    if [ -f $INSTALLER_DIR/$INSTALLER ]; then
         # Make the installer executable (only needed on linux)
 	case "$OSTYPE" in
 	  linux*) 
-            chmod +x ./installers/$INSTALLER 
-    	    ls -la ./installers
+            chmod +x $INSTALLER_DIR/$INSTALLER 
+    	    ls -la $INSTALLER_DIR
             ;;
 	esac 
         # Start the installer in headless mode
-        ./installers/$INSTALLER --script generated/qt-installer-noninteractive.qs --verbose -platform minimal
+        $INSTALLER_DIR/$INSTALLER --script generated/qt-installer-noninteractive.qs --verbose -platform minimal
     else
         echo "Failed downloading qt installer to expected folder."
     fi
@@ -47,9 +51,9 @@ else
     # Make the installer executable (only needed on linux)
     case "$OSTYPE" in
       linux*) 
-        chmod +x ./installers/$INSTALLER 
-        ls -la ./installers
+        chmod +x $INSTALLER_DIR/$INSTALLER 
+        ls -la $INSTALLER_DIR
         ;;
     esac 
-    ./installers/$INSTALLER --script generated/qt-installer-noninteractive.qs --verbose -platform minimal
+    $INSTALLER_DIR/$INSTALLER --script generated/qt-installer-noninteractive.qs --verbose -platform minimal
 fi
