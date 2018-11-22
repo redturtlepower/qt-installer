@@ -28,6 +28,7 @@ case "$OSTYPE" in
   *)        echo "unknown: $OSTYPE" ;;
 esac 
 
+mkdir $INSTALLER_DIR
 # If the installer is not found, download it!
 if [ ! -f $INSTALLER_DIR/$INSTALLER ]; then
     echo "Installer not found! Trying to download..."
@@ -45,7 +46,7 @@ if [ ! -f $INSTALLER_DIR/$INSTALLER ]; then
         # Start the installer in headless mode
         $INSTALLER_DIR/$INSTALLER --script generated/qt-installer-noninteractive.qs --verbose -platform minimal
     else
-        echo "Failed downloading qt installer to expected folder."
+        echo "Failed downloading qt installer to folder" $INSTALLER_DIR
     fi
 else       
     # Make the installer executable (only needed on linux)
