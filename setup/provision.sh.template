@@ -11,16 +11,19 @@ case "$OSTYPE" in
   darwin*) 
     echo "OSX" 
     INSTALLER_DIR="/Users/jenkins/Desktop/installers/"
+    INSTALLATION_DIR="/Users/__USER_NAME__/Qt__QT_VERSION__"
     INSTALLER=qt-opensource-mac-x64-__QT_VERSION__.dmg
     ;; 
   linux*)   
     echo "LINUX" 
     INSTALLER_DIR="/var/installers/"
+    INSTALLATION_DIR="/home/__USER_NAME__/Qt__QT_VERSION__"
     INSTALLER=qt-opensource-linux-x64-__QT_VERSION__.run
     ;;
   msys*)    
     echo "WINDOWS"
     INSTALLER_DIR="C:/installers/"
+    INSTALLATION_DIR="C:/Qt__QT_VERSION__"
     INSTALLER=qt-opensource-windows-x86-__QT_VERSION__.exe
     ;;
   solaris*) echo "SOLARIS" ;;
@@ -28,33 +31,30 @@ case "$OSTYPE" in
   *)        echo "unknown: $OSTYPE" ;;
 esac 
 
-mkdir $INSTALLER_DIR
-# If the installer is not found, download it!
-if [ ! -f $INSTALLER_DIR/$INSTALLER ]; then
-    echo "Installer not found! Trying to download to dir " $INSTALLER_DIR "..."
-    URL=https://download.qt.io/archive/qt/$MAJOR.$MINOR/$MAJOR.$MINOR.$PATCH/$INSTALLER
-    echo "Downloading from url "$URL
-    curl -o $INSTALLER_DIR/$INSTALLER -sL $URL
+
+if [ "$(ls -a $INSTALLATION_DIR)" ]; then
+    # Qt is already installed!
+else
+    echo "Qt not found! Trying to install to dir " $INSTALLATION_DIR "..."
+    # If the installer is not found, download it!
+    if [ ! -f $INSTALLER_DIR/$INSTALLER ]; then
+        echo "Installer not found! Trying to download to dir " $INSTALLER_DIR "..."
+        URL=https://download.qt.io/archive/qt/$MAJOR.$MINOR/$MAJOR.$MINOR.$PATCH/$INSTALLER
+        echo "Downloading from url "$URL
+        mkdir $INSTALLER_DIR
+        curl -o $INSTALLER_DIR/$INSTALLER -sL $URL
+    fi
     if [ -f $INSTALLER_DIR/$INSTALLER ]; then
         # Make the installer executable (only needed on linux)
-	case "$OSTYPE" in
-	  linux*) 
-            chmod +x $INSTALLER_DIR/$INSTALLER 
-    	    ls -la $INSTALLER_DIR
-            ;;
-	esac 
+        case "$OSTYPE" in
+            linux*) 
+                chmod +x $INSTALLER_DIR/$INSTALLER 
+                ls -la $INSTALLER_DIR
+                ;;
+        esac 
         # Start the installer in headless mode
         $INSTALLER_DIR/$INSTALLER --script generated/qt-installer-noninteractive.qs --verbose -platform minimal
     else
         echo "Failed downloading qt installer to folder" $INSTALLER_DIR
     fi
-else       
-    # Make the installer executable (only needed on linux)
-    case "$OSTYPE" in
-      linux*) 
-        chmod +x $INSTALLER_DIR/$INSTALLER 
-        ls -la $INSTALLER_DIR
-        ;;
-    esac 
-    $INSTALLER_DIR/$INSTALLER --script generated/qt-installer-noninteractive.qs --verbose -platform minimal
 fi
