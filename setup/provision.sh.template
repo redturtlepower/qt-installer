@@ -33,7 +33,7 @@ esac
 
 
 if [ "$(ls -a $INSTALLATION_DIR)" ]; then
-    # Qt is already installed!
+    echo "Qt is already installed!"
 else
     echo "Qt not found! Trying to install to dir " $INSTALLATION_DIR "..."
     # If the installer is not found, download it!
