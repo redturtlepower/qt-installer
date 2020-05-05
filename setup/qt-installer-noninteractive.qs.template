@@ -79,25 +79,33 @@ Controller.prototype.WelcomePageCallback = function() {
 }
 
 Controller.prototype.CredentialsPageCallback = function() {
-	
-	var login = installer.environmentVariable("QT_CI_LOGIN");
-	var password = installer.environmentVariable("QT_CI_PASSWORD");
+    log("Credentials Page")
 
-	if (login === "" || password === "") {
-		gui.clickButton(buttons.CommitButton);
-	}
+    var login = installer.environmentVariable("QT_CI_LOGIN");
+    var password = installer.environmentVariable("QT_CI_PASSWORD");
+
+    if ( login === "" ){
+        log("Please provide the qt login username via ENV 'QT_CI_LOGIN'!");
+    }else{
+        log("qt login:"+login);
+    }
+    if ( password === "" ){
+        log("Please provide the qt login password via ENV 'QT_CI_PASSWORD!");
+    }
+
+    if (login === "" || password === "") {
+	gui.clickButton(buttons.CommitButton);
+    }
 	
     var widget = gui.currentPageWidget();
-
-	widget.loginWidget.EmailLineEdit.setText(login);
-
-	widget.loginWidget.PasswordLineEdit.setText(password);
+    widget.loginWidget.EmailLineEdit.setText(login);
+    widget.loginWidget.PasswordLineEdit.setText(password);
 
     gui.clickButton(buttons.CommitButton);
 }
 
 Controller.prototype.ComponentSelectionPageCallback = function() {
-	log("ComponentSelectionPageCallback");	 
+    log("ComponentSelectionPageCallback");	 
 
     function trim(str) {
         return str.replace(/^ +/,"").replace(/ *$/,"");
