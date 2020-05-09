@@ -42,6 +42,15 @@ var status = {
     installationFinished: false
 }
 
+// Question for tracking usage data, refuse it
+Controller.prototype.DynamicTelemetryPluginFormCallback = function() {
+    logCurrentPage()
+    console.log(Object.keys(page().TelemetryPluginForm.statisticGroupBox))
+    var radioButtons = page().TelemetryPluginForm.statisticGroupBox
+    radioButtons.disableStatisticRadioButton.checked = true
+    proceed()
+}
+
 function tryFinish() {
     if (status.finishedPageVisible && status.installationFinished) {
         if (status.widget.RunItCheckBox) {
