@@ -172,8 +172,8 @@ then
                     ;;
             esac 
             # Start the installer in headless mode
-
-            installer_log=$($INSTALLER_DIR/$INSTALLER_NAME --script control-script.qs --verbose);
+            QT_QPA_PLATFORM=minimal
+            installer_log=$($INSTALLER_DIR/$INSTALLER_NAME --script control-script.qs --verbose --silent -platform minimal);
             echo $installer_log
             echo $installer_log > installer_log.txt
             
@@ -200,13 +200,13 @@ else
     # List packages
     if [ -f $INSTALLER_DIR/$INSTALLER_NAME ]; then
         echo "Listing packages of " $INSTALLER_DIR/$INSTALLER_NAME;
-        installer_log=$($INSTALLER_DIR/$INSTALLER_NAME --script control-script.qs --verbose);
-        echo $installer_log > installer_log.txt
+        installer_log=$($INSTALLER_DIR/$INSTALLER_NAME --script control-script.qs --verbose --silent -platform minimal);
+        echo $installer_log > $INSTALLER_DIR/installer_log.txt
         # Replace \r with \n
-        tr '\r' '\n' < installer_log.txt > installer_log_lf.txt
+        tr '\r' '\n' < $INSTALLER_DIR/installer_log.txt > $INSTALLER_DIR/installer_log_lf.txt
         # Extract the 2nd last line that contains a list of all packages: extract last 2 lines, keep only 1st of those 2
-        packages_line=$(cat installer_log_lf.txt | tail -n2 | head -n1);
-        rm installer_log_lf.txt
+        packages_line=$(cat $INSTALLER_DIR/installer_log_lf.txt | tail -n2 | head -n1);
+        #rm installer_log_lf.txt
         echo $packages_line > ${INSTALLER_DIR}/packages_line.txt
         # One package per line
         sed 's/ /\n/g' < ${INSTALLER_DIR}/packages_line.txt > ${INSTALLER_DIR}/temp.txt
