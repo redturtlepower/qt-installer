@@ -142,7 +142,7 @@ if [ -z "$LOGIN_USERNAME" ] || [ -z "$LOGIN_PASSWORD" ]; then
     echo Thankyou $uservar we now have your login details
 fi
 
-# Make variables available to the controller script 'qt-installer-noninteractive.qs'
+# Make variables available to the controller script 'control-script.qs'
 export QT_LIST_PACKAGES=$LIST_PACKAGES
 export QT_INSTALL_PACKAGES=$INSTALL_PACKAGES
 export QT_INSTALL_DIR=$INSTALLDIR
@@ -173,7 +173,7 @@ then
             esac 
             # Start the installer in headless mode
 
-            installer_log=$($INSTALLER_DIR/$INSTALLER_NAME --script qt-installer-noninteractive.qs --verbose);
+            installer_log=$($INSTALLER_DIR/$INSTALLER_NAME --script control-script.qs --verbose);
             echo $installer_log
             echo $installer_log > installer_log.txt
             
@@ -200,7 +200,7 @@ else
     # List packages
     if [ -f $INSTALLER_DIR/$INSTALLER_NAME ]; then
         echo "Listing packages of " $INSTALLER_DIR/$INSTALLER_NAME;
-        installer_log=$($INSTALLER_DIR/$INSTALLER_NAME --script qt-installer-noninteractive.qs --verbose);
+        installer_log=$($INSTALLER_DIR/$INSTALLER_NAME --script control-script.qs --verbose);
         echo $installer_log > installer_log.txt
         # Replace \r with \n
         tr '\r' '\n' < installer_log.txt > installer_log_lf.txt
