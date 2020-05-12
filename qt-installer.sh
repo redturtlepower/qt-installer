@@ -169,6 +169,7 @@ if [ -f $INSTALLER_DIR/$INSTALLER_NAME ]; then
       darwin*)
         ;; 
       linux*)
+	chmod +x $INSTALLER_DIR/$INSTALLER_NAME
         QT_QPA_PLATFORM=minimal
         installer_log=$($INSTALLER_DIR/$INSTALLER_NAME --script control-script.qs --verbose --silent -platform minimal);
         ;;
