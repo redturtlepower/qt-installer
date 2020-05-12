@@ -46,7 +46,7 @@ Install the specified packages. Download the installer if not found (checked at 
 The parameters *--username* and *--password* won't be exported for security reasons.
 Instead, set the system environment variables  **QT_INSTALLER_LOGIN_MAIL** and **QT_INSTALLER_LOGIN_PW** accordingly. The control script will read them.
 
-The exported control script will be placed at directory *--filedir* with name `control-script.qs`.
+The exported control script will be placed at directory *--filedir* with name `control-script.exported.qs`.
 
 `bash qt-installer.sh --export-control-script --filedir="/var/installers/" --filename="qt-opensource-linux-x64-5.12.8.run" --packages="qt.qt5.5128.win64_msvc2017_64 qt.qt5.5128.qtwebengine qt.qt5.5128.qtnetworkauth" --installdir="/home/jenkins/Qt"`
 
@@ -60,20 +60,23 @@ You might want to just download the installer file to a directory without instal
 
 # Parameters
 
-| parameter               | comment                                                      |
-| ----------------------- | ------------------------------------------------------------ |
-| --list-packages         | List all the packages, do not install                        |
-| --only-download         | Eventually downloads the file --filename to dir --filedir, do not install |
-| --export-control-script | Exports the control script with hardcoded parameters, do not install |
-| --filedir               | The directory where the installer file is located            |
-| --filename              | The name of the installer file, including file ending        |
-| --version, -v           | The version to be installed in the format **x.yy.z**, like 5.12.8 |
-| --packages              | Space separated string of packages as output by *--list-packages* |
-| --installdir            | The installation directory                                   |
-| --username, -u          | Alternative: ENV variable **QT_INSTALLER_LOGIN_MAIL**        |
-| --password              | Alternative: ENV variable **QT_INSTALLER_LOGIN_PW**          |
-| --cleanup               | Optional flag. Set to remove unnecessary files and directories after installation |
-| --archive-url           | The URL to the download archive of Qt. <br />Defaults to https://download.qt.io/archive/qt/**<br />appended internally** with **/x.yy/x.yy.z/filename** |
+Parameters need to be provided in the format *--parameter=value*, unless the parameter is a FLAG. A flag only needs the parameter itself. Example: *--list-packages*.
+
+| parameter                     | comment                                                      |
+| ----------------------------- | ------------------------------------------------------------ |
+| --list-packages               | FLAG. List all the packages, do not install                  |
+| --only-download               | FLAG. Eventually downloads the file --filename to dir --filedir, do not install |
+| --export-control-script       | FLAG. Exports the control script with hardcoded parameters, do not install |
+| --export-credentials-insecure | FLAG. If set together with the flag *--export-control-script*, causes the credentials to be exported in plain text! Take care! |
+| --cleanup                     | FLAG. Set to remove unnecessary files and directories after installation |
+| --filedir                     | The directory where the installer file is located            |
+| --filename                    | The name of the installer file, including file ending        |
+| --version, -v                 | The version to be installed in the format **x.yy.z**, like 5.12.8 |
+| --packages                    | Space separated string of packages as output by *--list-packages* |
+| --installdir                  | The installation directory                                   |
+| --username, -u                | Alternative: ENV variable **QT_INSTALLER_LOGIN_MAIL**        |
+| --password                    | Alternative: ENV variable **QT_INSTALLER_LOGIN_PW**          |
+| --archive-url                 | The URL to the download archive of Qt. <br />Defaults to https://download.qt.io/archive/qt/**<br />appended internally** with **/x.yy/x.yy.z/filename** |
 
 
 

@@ -33,6 +33,11 @@ case $i in
     echo "Task: Export the control script with all variables hardcoded."
     shift # past argument=value
     ;;
+    --export-credentials-insecure)
+    PLAIN_TEXT_EXPORT_CREDENTIALS=1
+    echo "Task: Export plain text credentials. SECURITY RISK!"
+    shift # past argument=value
+    ;;
     --filedir=*)
     INSTALLER_DIR="${i#*=}"
     echo "Installer directory is:" $INSTALLER_DIR
@@ -187,6 +192,15 @@ else
     else
         VALUE=$QT_LIST_PACKAGES
         sed -i -e "s|installer.environmentVariable(\"QT_LIST_PACKAGES\")|$VALUE|g" $exportpath
+    fi
+    
+    # BEWARE!! SECURITY RISK
+    if [ -z "$PLAIN_TEXT_EXPORT_CREDENTIALS" ]; then :;
+    else
+        VALUE=$QT_INSTALLER_LOGIN_MAIL
+        sed -i -e "s|installer.environmentVariable(\"QT_INSTALLER_LOGIN_MAIL\")|\"$VALUE\"|g" $exportpath
+        VALUE=$QT_INSTALLER_LOGIN_PW
+        sed -i -e "s|installer.environmentVariable(\"QT_INSTALLER_LOGIN_PW\")|\"$VALUE\"|g" $exportpath
     fi
       
     #HELLO=WORLD
