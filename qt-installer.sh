@@ -166,7 +166,7 @@ if [ -z $EXPORT_CONTROL_SCRIPT ]; then
     echo "Exporting the control script."
     # We don't want to install; we just export the control script with hardcoded parameters.
     exportpath=$INSTALLER_DIR/control-script.exported.qs
-    echo $(cat control-script.qs) > $exportpath
+    cp control-script.qs $exportpath
     
     # Replace parameters in script, if the parameter has been specified
     if [ -z "$QT_INSTALL_PACKAGES" ]; then :;
@@ -186,11 +186,10 @@ if [ -z $EXPORT_CONTROL_SCRIPT ]; then
         VALUE=$QT_LIST_PACKAGES
         sed -i -e "s|installer.environmentVariable(\"QT_LIST_PACKAGES\")|$VALUE|g" $exportpath
     fi
-    
+      
     #HELLO=WORLD
     #sed -i -e "s/installer.environmentVariable(\"QT_LIST_PACKAGES\")/$HELLO/g" $exportpath;
-    
-    exit 1; 
+    exit 1;
 fi
 
 bash maybe-download-installer.sh $INSTALLER_DIR $INSTALLER_NAME $ARCHIVE_URL $INSTALL_VERSION 
@@ -202,8 +201,7 @@ else
 fi
 
 if [ -f $INSTALLER_DIR/$INSTALLER_NAME ]; then
-    case "$OSTYPE" in00
-    
+    case "$OSTYPE" in    
       darwin*)
         ;; 
       linux*)
