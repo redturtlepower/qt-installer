@@ -58,6 +58,11 @@ case $i in
     echo "Download archive url: " $ARCHIVE_URL
     shift # past argument=value
     ;;
+    --no-install=*)
+    NO_INSTALL=1
+    echo "Task: Only download, don't install."
+    shift # past argument=value
+    ;;
     -u=*|--username=*)
     if [ -z "${LOGIN_USERNAME}" ]; then
         :
@@ -153,6 +158,12 @@ if [ -z "$ARCHIVE_URL" ]; then
 fi
 bash maybe-download-installer.sh $INSTALLER_DIR $INSTALLER_NAME $INSTALL_VERSION $ARCHIVE_URL
 
+if [ -z $NO_INSTALL ]; then
+    : 
+else
+    exit 1; # We don't want to install; we just downloaded the file (in case it did not exist). Exit.
+fi
+
 if [ -f $INSTALLER_DIR/$INSTALLER_NAME ]; then
     case "$OSTYPE" in
       darwin*)
@@ -213,5 +224,4 @@ else
     echo Packages:
     echo cat ${pkgfile}
 fi
-
 

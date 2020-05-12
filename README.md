@@ -54,6 +54,7 @@ Install the specified packages. Download the installer if not found (checked at 
 | --username, -u  | Alternative: ENV variable **QT_INSTALLER_LOGIN_MAIL**        |
 | --password      | Alternative: ENV variable **QT_INSTALLER_LOGIN_PW**          |
 | --cleanup       | Optional flag. Set to remove unnecessary files and directories after installation |
+| --no-install    | Eventually downloads the file --filename to dir --filedir, nothing else. |
 | --archive-url   | The URL to the download archive of Qt. <br />Defaults to https://download.qt.io/archive/qt/**<br />appended internally** with **/x.yy/x.yy.z/filename** |
 
 
