@@ -6,10 +6,10 @@
 # Given INSTALL_VERSION, the script will build the correct subpath in the format /MAJOR.MINOR/MAJOR.MINOR.PATH/<installername>
 echo Calling script $0
 echo Arguments:
-echo $1
-echo $2
-echo $3
-echo $4
+#echo $1
+#echo $2
+#echo $3
+#echo $4
 
 args=("$@")
 INSTALLER_DIR=${args[0]}
@@ -17,10 +17,10 @@ INSTALLER_NAME=${args[1]}
 INSTALL_VERSION=${args[2]}
 QT_ARCHIVE_URL=${args[3]}
 
-#echo INSTALLER_DIR $INSTALLER_DIR
-#echo INSTALLER_NAME $INSTALLER_NAME
-#echo INSTALL_VERSION $INSTALL_VERSION
-#echo QT_ARCHIVE_URL $QT_ARCHIVE_URL
+echo INSTALLER_DIR $INSTALLER_DIR
+echo INSTALLER_NAME $INSTALLER_NAME
+echo INSTALL_VERSION $INSTALL_VERSION
+echo QT_ARCHIVE_URL $QT_ARCHIVE_URL
 
 # If the installer is not found, download it!
 if [ ! -f $INSTALLER_DIR/$INSTALLER_NAME ]; then
