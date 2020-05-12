@@ -1,14 +1,14 @@
 # Try to read the login credentials from the system environment variables
-LOGIN_USERNAME=${QT_INSTALLER_LOGIN_MAIL}
-LOGIN_PASSWORD=${QT_INSTALLER_LOGIN_PW}
+QT_INSTALLER_LOGIN_MAIL=${QT_INSTALLER_LOGIN_MAIL}
+QT_INSTALLER_LOGIN_PW=${QT_INSTALLER_LOGIN_PW}
 
 # -z checks for emptyness of variable
-if [ -z "${LOGIN_USERNAME}" ]; then
+if [ -z "${QT_INSTALLER_LOGIN_MAIL}" ]; then
     :
 else
     echo "Found qt login email in system environment"
 fi
-if [ -z "${LOGIN_USERNAME}" ]; then
+if [ -z "${QT_INSTALLER_LOGIN_MAIL}" ]; then
     :
 else
     echo "Found qt login password in system environment"
@@ -58,27 +58,32 @@ case $i in
     echo "Download archive url: " $ARCHIVE_URL
     shift # past argument=value
     ;;
-    --no-install=*)
-    NO_INSTALL=1
+    --only-download=*)
+    ONLY_DOWNLOAD=1
     echo "Task: Only download, don't install."
     shift # past argument=value
     ;;
+    --export-control-script=*)
+    EXPORT_CONTROL_SCRIPT=1
+    echo "Task: Export the control script with all variables hardcoded."
+    shift # past argument=value
+    ;;
     -u=*|--username=*)
-    if [ -z "${LOGIN_USERNAME}" ]; then
+    if [ -z "${QT_INSTALLER_LOGIN_MAIL}" ]; then
         :
     else
         echo "Warning: Overwriting qt login email from system environment"
     fi
-    LOGIN_USERNAME="${i#*=}"
+    QT_INSTALLER_LOGIN_MAIL="${i#*=}"
     shift # past argument=value
     ;;
     --password=*)
-    if [ -z "${LOGIN_PASSWORD}" ]; then
+    if [ -z "${QT_INSTALLER_LOGIN_PW}" ]; then
         :
     else
         echo "Warning: Overwriting qt login password from system environment"
     fi
-    LOGIN_PASSWORD="${i#*=}"
+    QT_INSTALLER_LOGIN_PW="${i#*=}"
     shift # past argument=value
     ;;
     --default)
@@ -139,33 +144,66 @@ else
 fi
 
 # If no credentials provided, ask the user for input.
-if [ -z "$LOGIN_USERNAME" ] || [ -z "$LOGIN_PASSWORD" ]; then
+if [ -z "$QT_INSTALLER_LOGIN_MAIL" ] || [ -z "$QT_INSTALLER_LOGIN_PW" ]; then
     echo The installer requires to log in to Qt. Internet connection required! Please provide your login details.
-    read -p 'Qt login username: ' LOGIN_USERNAME
-    read -sp 'Qt login password: ' LOGIN_PASSWORD
+    read -p 'Qt login username: ' QT_INSTALLER_LOGIN_MAIL
+    read -sp 'Qt login password: ' QT_INSTALLER_LOGIN_PW
 fi
 
 # Make variables available to the controller script 'control-script.qs'
 export QT_LIST_PACKAGES=$LIST_PACKAGES
 export QT_INSTALL_PACKAGES=$INSTALL_PACKAGES
 export QT_INSTALL_DIR=$INSTALLDIR
-export QT_LOGIN=$LOGIN_USERNAME
-export QT_PASSWORD=$LOGIN_PASSWORD
+export QT_INSTALLER_LOGIN_MAIL=$QT_INSTALLER_LOGIN_MAIL
+export QT_INSTALLER_LOGIN_PW=$QT_INSTALLER_LOGIN_PW
 
 if [ -z "$ARCHIVE_URL" ]; then
     # If no download archive url has been specified, choose a default one:
     ARCHIVE_URL=https://download.qt.io/archive/qt/
 fi
+
+if [ -z $EXPORT_CONTROL_SCRIPT ]; then
+    echo "Exporting the control script."
+    # We don't want to install; we just export the control script with hardcoded parameters.
+    exportpath=$INSTALLER_DIR/control-script.exported.qs
+    echo $(cat control-script.qs) > $exportpath
+    
+    # Replace parameters in script, if the parameter has been specified
+    if [ -z "$QT_INSTALL_PACKAGES" ]; then :;
+    else 
+        VALUE=$QT_INSTALL_PACKAGES
+        sed -i -e "s|installer.environmentVariable(\"QT_INSTALL_PACKAGES\")|$VALUE|g" $exportpath 
+    fi
+    
+    if [ -z "$QT_INSTALL_DIR" ]; then :;
+    else 
+        VALUE=$QT_INSTALL_DIR
+        sed -i -e "s|installer.environmentVariable(\"QT_INSTALL_DIR\")|$VALUE|g" $exportpath
+    fi
+    
+    if [ -z "$QT_LIST_PACKAGES" ]; then :;
+    else
+        VALUE=$QT_LIST_PACKAGES
+        sed -i -e "s|installer.environmentVariable(\"QT_LIST_PACKAGES\")|$VALUE|g" $exportpath
+    fi
+    
+    #HELLO=WORLD
+    #sed -i -e "s/installer.environmentVariable(\"QT_LIST_PACKAGES\")/$HELLO/g" $exportpath;
+    
+    exit 1; 
+fi
+
 bash maybe-download-installer.sh $INSTALLER_DIR $INSTALLER_NAME $ARCHIVE_URL $INSTALL_VERSION 
 
-if [ -z $NO_INSTALL ]; then
+if [ -z $ONLY_DOWNLOAD ]; then
     : 
 else
     exit 1; # We don't want to install; we just downloaded the file (in case it did not exist). Exit.
 fi
 
 if [ -f $INSTALLER_DIR/$INSTALLER_NAME ]; then
-    case "$OSTYPE" in
+    case "$OSTYPE" in00
+    
       darwin*)
         ;; 
       linux*)

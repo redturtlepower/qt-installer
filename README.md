@@ -1,9 +1,11 @@
 # About this repository
 
-This repository can solve two kind of problems. 
+This repository can solve those kind of problems. 
 
 1. List available packages in the Qt offline installer
 2. Install Qt without user interaction (CI setup)
+3. Export a control script with hardcoded variables. The script can be used with an existing installer.
+4. Just download the installer. For example, download the .exe file on a linux host for usage in wine.
 
 Qt requires the user to be log in to their Qt account during installation. Hence you have to provide credentials. This is also required for listing the packages, because the packages are read when the component selection screen is shown, which comes after the login screen. There are three options to provide the credentials: 
 
@@ -39,23 +41,39 @@ Install the specified packages. Download the installer if not found (checked at 
 
 `bash qt-installer.sh --filedir="/var/installers/" --filename="qt-opensource-linux-x64-5.12.8.run" --version=5.12.8 --packages="qt.qt5.5128.win64_msvc2017_64 qt.qt5.5128.qtwebengine qt.qt5.5128.qtnetworkauth" --installdir="/home/jenkins/Qt" --cleanup ` 
 
+## 3 Export the control script
+
+The parameters *--username* and *--password* won't be exported for security reasons.
+Instead, set the system environment variables  **QT_INSTALLER_LOGIN_MAIL** and **QT_INSTALLER_LOGIN_PW** accordingly. The control script will read them.
+
+The exported control script will be placed at directory *--filedir* with name `control-script.qs`.
+
+`bash qt-installer.sh --export-control-script --filedir="/var/installers/" --filename="qt-opensource-linux-x64-5.12.8.run" --packages="qt.qt5.5128.win64_msvc2017_64 qt.qt5.5128.qtwebengine qt.qt5.5128.qtnetworkauth" --installdir="/home/jenkins/Qt"`
+
+## 4 Download the installer
+
+You might want to just download the installer file to a directory without installing it afterwards. An example use case could be a Windows build environment in WINE on an Ubuntu host. From the host, download the *.exe file. Afterwards run wine to install that file.
+
+`bash qt-installer.sh --only-download --filedir="/var/installers/" --filename="qt-opensource-windows-x86-5.12.8.exe" --version=5.12.8`
+
 
 
 # Parameters
 
-| parameter       | comment                                                      |
-| --------------- | ------------------------------------------------------------ |
-| --list-packages | List all the packages, do not install                        |
-| --filedir       | The directory where the installer file is located            |
-| --filename      | The name of the installer file, including file ending        |
-| --version, -v   | The version to be installed in the format **x.yy.z**, like 5.12.8 |
-| --packages      | Space separated string of packages as output by *--list-packages* |
-| --installdir    | The installation directory                                   |
-| --username, -u  | Alternative: ENV variable **QT_INSTALLER_LOGIN_MAIL**        |
-| --password      | Alternative: ENV variable **QT_INSTALLER_LOGIN_PW**          |
-| --cleanup       | Optional flag. Set to remove unnecessary files and directories after installation |
-| --no-install    | Eventually downloads the file --filename to dir --filedir, nothing else. |
-| --archive-url   | The URL to the download archive of Qt. <br />Defaults to https://download.qt.io/archive/qt/**<br />appended internally** with **/x.yy/x.yy.z/filename** |
+| parameter               | comment                                                      |
+| ----------------------- | ------------------------------------------------------------ |
+| --list-packages         | List all the packages, do not install                        |
+| --only-download         | Eventually downloads the file --filename to dir --filedir, do not install |
+| --export-control-script | Exports the control script with hardcoded parameters, do not install |
+| --filedir               | The directory where the installer file is located            |
+| --filename              | The name of the installer file, including file ending        |
+| --version, -v           | The version to be installed in the format **x.yy.z**, like 5.12.8 |
+| --packages              | Space separated string of packages as output by *--list-packages* |
+| --installdir            | The installation directory                                   |
+| --username, -u          | Alternative: ENV variable **QT_INSTALLER_LOGIN_MAIL**        |
+| --password              | Alternative: ENV variable **QT_INSTALLER_LOGIN_PW**          |
+| --cleanup               | Optional flag. Set to remove unnecessary files and directories after installation |
+| --archive-url           | The URL to the download archive of Qt. <br />Defaults to https://download.qt.io/archive/qt/**<br />appended internally** with **/x.yy/x.yy.z/filename** |
 
 
 

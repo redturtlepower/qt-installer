@@ -104,16 +104,16 @@ Controller.prototype.WelcomePageCallback = function() {
 Controller.prototype.CredentialsPageCallback = function() {
     log("Credentials Page")
 
-    var login = installer.environmentVariable("QT_LOGIN");
-    var password = installer.environmentVariable("QT_PASSWORD");
+    var login = installer.environmentVariable("QT_INSTALLER_LOGIN_MAIL");
+    var password = installer.environmentVariable("QT_INSTALLER_LOGIN_PW");
 
     if ( login === "" ){
-        log("Please provide the qt login username via ENV 'QT_LOGIN'!");
+        log("Please provide the qt login username via ENV 'QT_INSTALLER_LOGIN_MAIL'!");
     }else{
         log("qt login:"+login);
     }
     if ( password === "" ){
-        log("Please provide the qt login password via ENV 'QT_PASSWORD!");
+        log("Please provide the qt login password via ENV 'QT_INSTALLER_LOGIN_PW!");
     }
 
     if (login === "" || password === "") {
@@ -153,7 +153,7 @@ Controller.prototype.ComponentSelectionPageCallback = function() {
 
     var widget = gui.currentPageWidget();
 
-    var packageList = installer.environmentVariable("QT_INSTALL_PACKAGES"); // example: "qt.qt5.5110.win32_msvc2015 qt.qt5.5110.qtnetworkauth";
+    var packageList = installer.environmentVariable("QT_INSTALL_PACKAGES");
     var packages = trim(packageList).split(" ");
     if (packages.length > 0 && packages[0] !== "") {
         widget.deselectAll();
