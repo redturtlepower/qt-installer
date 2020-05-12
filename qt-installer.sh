@@ -162,7 +162,9 @@ if [ -z "$ARCHIVE_URL" ]; then
     ARCHIVE_URL=https://download.qt.io/archive/qt/
 fi
 
-if [ -z $EXPORT_CONTROL_SCRIPT ]; then
+if [ -z "$EXPORT_CONTROL_SCRIPT" ]; then
+    :
+else
     echo "Exporting the control script."
     # We don't want to install; we just export the control script with hardcoded parameters.
     exportpath=$INSTALLER_DIR/control-script.exported.qs
