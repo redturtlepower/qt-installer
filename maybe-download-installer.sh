@@ -14,13 +14,13 @@ echo Arguments:
 args=("$@")
 INSTALLER_DIR=${args[0]}
 INSTALLER_NAME=${args[1]}
-INSTALL_VERSION=${args[2]}
-QT_ARCHIVE_URL=${args[3]}
+QT_ARCHIVE_URL=${args[2]}
+INSTALL_VERSION=${args[3]}
 
 echo INSTALLER_DIR $INSTALLER_DIR
 echo INSTALLER_NAME $INSTALLER_NAME
-echo INSTALL_VERSION $INSTALL_VERSION
 echo QT_ARCHIVE_URL $QT_ARCHIVE_URL
+echo INSTALL_VERSION $INSTALL_VERSION
 
 # If the installer is not found, download it!
 if [ ! -f $INSTALLER_DIR/$INSTALLER_NAME ]; then

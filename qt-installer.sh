@@ -156,7 +156,7 @@ if [ -z "$ARCHIVE_URL" ]; then
     # If no download archive url has been specified, choose a default one:
     ARCHIVE_URL=https://download.qt.io/archive/qt/
 fi
-bash maybe-download-installer.sh $INSTALLER_DIR $INSTALLER_NAME $INSTALL_VERSION $ARCHIVE_URL
+bash maybe-download-installer.sh $INSTALLER_DIR $INSTALLER_NAME $ARCHIVE_URL $INSTALL_VERSION 
 
 if [ -z $NO_INSTALL ]; then
     : 
