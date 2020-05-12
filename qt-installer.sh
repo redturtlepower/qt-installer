@@ -180,7 +180,7 @@ else
     if [ -z "$QT_INSTALL_DIR" ]; then :;
     else 
         VALUE=$QT_INSTALL_DIR
-        sed -i -e "s|installer.environmentVariable(\"QT_INSTALL_DIR\")|$VALUE|g" $exportpath
+        sed -i -e "s|installer.environmentVariable(\"QT_INSTALL_DIR\")|\"$VALUE\"|g" $exportpath
     fi
     
     if [ -z "$QT_LIST_PACKAGES" ]; then :;
