@@ -24,6 +24,13 @@ QT_ARCHIVE_URL=${args[3]}
 
 # If the installer is not found, download it!
 if [ ! -f $INSTALLER_DIR/$INSTALLER_NAME ]; then
+
+    if [ -z "$INSTALL_VERSION" ]; then
+        # The required version is not specified! 
+        echo "Download failed. Please specify the version via --version=X.YY.Z"
+        exit 1
+    fi
+    
     echo "Installer not found! Trying to download to dir " $INSTALLER_DIR "..."
 
     # Parse INSTALL_VERSION. Initializes: MAJOR, MINOR, PATCH, QT_PREFIX
