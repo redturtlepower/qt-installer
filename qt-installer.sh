@@ -28,6 +28,11 @@ case $i in
     echo "Task: Delete unnecessary directories"
     shift # past argument=value
     ;;
+    --export-control-script)
+    EXPORT_CONTROL_SCRIPT=1
+    echo "Task: Export the control script with all variables hardcoded."
+    shift # past argument=value
+    ;;
     --filedir=*)
     INSTALLER_DIR="${i#*=}"
     echo "Installer directory is:" $INSTALLER_DIR
@@ -61,11 +66,6 @@ case $i in
     --only-download=*)
     ONLY_DOWNLOAD=1
     echo "Task: Only download, don't install."
-    shift # past argument=value
-    ;;
-    --export-control-script=*)
-    EXPORT_CONTROL_SCRIPT=1
-    echo "Task: Export the control script with all variables hardcoded."
     shift # past argument=value
     ;;
     -u=*|--username=*)
