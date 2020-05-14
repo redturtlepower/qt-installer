@@ -16,7 +16,7 @@ fi
 
 for i in "$@"
 do
-echo "Parsing option" $i
+#echo "Parsing option" $i
 case $i in
     --list-packages)
     LIST_PACKAGES=1
@@ -148,13 +148,6 @@ else
     fi
 fi
 
-# If no credentials provided, ask the user for input.
-if [ -z "$QT_INSTALLER_LOGIN_MAIL" ] || [ -z "$QT_INSTALLER_LOGIN_PW" ]; then
-    echo The installer requires to log in to Qt. Internet connection required! Please provide your login details.
-    read -p 'Qt login username: ' QT_INSTALLER_LOGIN_MAIL
-    read -sp 'Qt login password: ' QT_INSTALLER_LOGIN_PW
-fi
-
 # Make variables available to the controller script 'control-script.qs'
 export QT_LIST_PACKAGES=$LIST_PACKAGES
 export QT_INSTALL_PACKAGES=$INSTALL_PACKAGES
@@ -214,6 +207,13 @@ if [ -z $ONLY_DOWNLOAD ]; then
     : 
 else
     exit 1; # We don't want to install; we just downloaded the file (in case it did not exist). Exit.
+fi
+
+# If no credentials provided, ask the user for input.
+if [ -z "$QT_INSTALLER_LOGIN_MAIL" ] || [ -z "$QT_INSTALLER_LOGIN_PW" ]; then
+    echo The installer requires to log in to Qt. Internet connection required! Please provide your login details.
+    read -p 'Qt login username: ' QT_INSTALLER_LOGIN_MAIL
+    read -sp 'Qt login password: ' QT_INSTALLER_LOGIN_PW
 fi
 
 if [ -f $INSTALLER_DIR/$INSTALLER_NAME ]; then
