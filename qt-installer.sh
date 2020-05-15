@@ -115,7 +115,7 @@ if [ -z "$INSTALLDIR" ];then
         ;;
       solaris*) echo "SOLARIS" ;;
       bsd*) echo "BSD" ;;
-      *) echo "unknown: $OSTYPE" ;;
+      *) echo "unknown OSTYPE: $OSTYPE" ;;
     esac
     echo "Installing into default directory" $INSTALLDIR
 fi
@@ -150,10 +150,10 @@ fi
 
 # Make variables available to the controller script 'control-script.qs'
 export QT_LIST_PACKAGES=$LIST_PACKAGES
-export QT_INSTALL_PACKAGES=$INSTALL_PACKAGES
-export QT_INSTALL_DIR=$INSTALLDIR
+export QT_INSTALL_PACKAGES="$INSTALL_PACKAGES"
+export QT_INSTALL_DIR="$INSTALLDIR"
 export QT_INSTALLER_LOGIN_MAIL=$QT_INSTALLER_LOGIN_MAIL
-export QT_INSTALLER_LOGIN_PW=$QT_INSTALLER_LOGIN_PW
+export QT_INSTALLER_LOGIN_PW="$QT_INSTALLER_LOGIN_PW"
 
 if [ -z "$ARCHIVE_URL" ]; then
     # If no download archive url has been specified, choose a default one:
@@ -198,7 +198,7 @@ else
       
     #HELLO=WORLD
     #sed -i -e "s/installer.environmentVariable(\"QT_LIST_PACKAGES\")/$HELLO/g" $exportpath;
-    exit 1;
+    exit 0;
 fi
 
 bash maybe-download-installer.sh $INSTALLER_DIR $INSTALLER_NAME $ARCHIVE_URL $INSTALL_VERSION 
