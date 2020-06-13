@@ -199,7 +199,7 @@ else
     exit 0;
 fi
 
-source maybe-download-installer.sh $INSTALLER_DIR $INSTALLER_NAME $ARCHIVE_URL $INSTALL_VERSION 
+source ./maybe-download-installer.sh $INSTALLER_DIR $INSTALLER_NAME $ARCHIVE_URL $INSTALL_VERSION 
 
 if [ -z $ONLY_DOWNLOAD ]; then
     :
