@@ -222,8 +222,9 @@ if [ -f $INSTALLER_DIR/$INSTALLER_NAME ]; then
         ;; 
       linux*)
         chmod +x $INSTALLER_DIR/$INSTALLER_NAME
-        QT_QPA_PLATFORM=minimal
-        installer_log=$($INSTALLER_DIR/$INSTALLER_NAME --script control-script.qs --verbose --silent -platform minimal);
+        #QT_QPA_PLATFORM=minimal
+        #installer_log=$($INSTALLER_DIR/$INSTALLER_NAME --script control-script.qs --verbose --silent -platform minimal);
+		installer_log=$($INSTALLER_DIR/$INSTALLER_NAME --script control-script.qs --verbose);
         ;;
       msys*)
         QT_QPA_PLATFORM=windows
