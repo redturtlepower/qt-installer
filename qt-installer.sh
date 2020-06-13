@@ -101,12 +101,12 @@ case $i in
 esac
 done
 
-if [ -z "$INSTALLDIR" ];then  
+if [ -z "$INSTALLDIR" ]; then
     # No installation directory specified. Select default directory
     case "$OSTYPE" in
       darwin*)
         INSTALLDIR=/Users/${USER}/Qt${INSTALL_VERSION}
-        ;; 
+        ;;
       linux*)
         INSTALLDIR=/home/${USER}/Qt${INSTALL_VERSION}
         ;;
@@ -121,8 +121,8 @@ if [ -z "$INSTALLDIR" ];then
 fi
 
 # Maybe select a default installer name
-if [ -z "$INSTALL_VERSION" ] # If 
-then 
+if [ -z "$INSTALL_VERSION" ]
+then
     # No version specified
     : #no-op
 else
@@ -132,7 +132,7 @@ else
         case "$OSTYPE" in
           darwin*)
             INSTALLER_NAME=qt-opensource-mac-x64-${INSTALL_VERSION}.dmg
-            ;; 
+            ;;
           linux*)
             INSTALLER_NAME=qt-opensource-linux-x64-${INSTALL_VERSION}.run
             ;;
@@ -167,26 +167,26 @@ else
     # We don't want to install; we just export the control script with hardcoded parameters.
     exportpath=$INSTALLER_DIR/control-script.exported.qs
     cp control-script.qs $exportpath
-    
+
     # Replace parameters in script, if the parameter has been specified
     if [ -z "$QT_INSTALL_PACKAGES" ]; then :;
-    else 
+    else
         VALUE=$QT_INSTALL_PACKAGES
         sed -i -e "s|installer.environmentVariable(\"QT_INSTALL_PACKAGES\")|\"$VALUE\"|g" $exportpath 
     fi
-    
+
     if [ -z "$QT_INSTALL_DIR" ]; then :;
-    else 
+    else
         VALUE=$QT_INSTALL_DIR
         sed -i -e "s|installer.environmentVariable(\"QT_INSTALL_DIR\")|\"$VALUE\"|g" $exportpath
     fi
-    
+
     if [ -z "$QT_LIST_PACKAGES" ]; then :;
     else
         VALUE=$QT_LIST_PACKAGES
         sed -i -e "s|installer.environmentVariable(\"QT_LIST_PACKAGES\")|$VALUE|g" $exportpath
     fi
-    
+
     # BEWARE!! SECURITY RISK
     if [ -z "$PLAIN_TEXT_EXPORT_CREDENTIALS" ]; then :;
     else
@@ -195,16 +195,14 @@ else
         VALUE=$QT_INSTALLER_LOGIN_PW
         sed -i -e "s|installer.environmentVariable(\"QT_INSTALLER_LOGIN_PW\")|\"$VALUE\"|g" $exportpath
     fi
-      
-    #HELLO=WORLD
-    #sed -i -e "s/installer.environmentVariable(\"QT_LIST_PACKAGES\")/$HELLO/g" $exportpath;
+
     exit 0;
 fi
 
 bash maybe-download-installer.sh $INSTALLER_DIR $INSTALLER_NAME $ARCHIVE_URL $INSTALL_VERSION 
 
 if [ -z $ONLY_DOWNLOAD ]; then
-    : 
+    :
 else
     exit 0; # We don't want to install; we just downloaded the file (in case it did not exist). Exit.
 fi
@@ -222,12 +220,11 @@ if [ -f $INSTALLER_DIR/$INSTALLER_NAME ]; then
         ;;
       linux*)
         chmod +x $INSTALLER_DIR/$INSTALLER_NAME
-	    echo Installing on Linux.
-	    ls -la $INSTALLER_DIR
-        QT_QPA_PLATFORM=minimal
+        echo Installing on Linux.
+        ls -la $INSTALLER_DIR
+        export QT_QPA_PLATFORM=minimal
         #installer_log=$($INSTALLER_DIR/$INSTALLER_NAME --script control-script.qs --verbose --silent -platform minimal);
-	    installer_log=$($INSTALLER_DIR/$INSTALLER_NAME --script control-script.qs --verbose);
-	    #$INSTALLER_DIR/$INSTALLER_NAME --script control-script.qs --verbose
+        installer_log=$($INSTALLER_DIR/$INSTALLER_NAME --script control-script.qs --verbose);
         ;;
       msys*)
         QT_QPA_PLATFORM=windows
