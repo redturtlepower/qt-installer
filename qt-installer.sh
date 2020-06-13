@@ -200,7 +200,8 @@ else
     exit 0;
 fi
 
-source ./maybe-download-installer.sh $INSTALLER_DIR $INSTALLER_NAME $ARCHIVE_URL $INSTALL_VERSION 
+ls -la
+bash maybe-download-installer.sh $INSTALLER_DIR $INSTALLER_NAME $ARCHIVE_URL $INSTALL_VERSION 
 echo The installer file should be available now.
 
 if [ -z $ONLY_DOWNLOAD ]; then
