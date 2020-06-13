@@ -37,9 +37,8 @@ if [ ! -f $INSTALLER_DIR/$INSTALLER_NAME ]; then
     MAJOR=$(cut -c-1 <<< ${INSTALL_VERSION}) # For Qt5.xx.x this yields 5
     MINOR=$(sed 's/\./\n/g' <<< ${INSTALL_VERSION} | awk 'NR==2')
     PATCH=$(sed 's/\./\n/g' <<< ${INSTALL_VERSION} | awk 'NR==3')
-    QT_VERSION_NO_DOTS=$(sed 's/\.//g' <<< ${INSTALL_VERSION} ) # yields: 5112
-    QT_PREFIX="qt.qt"$MAJOR.$VERSION_NO_DOTS.
-    echo Qt Version $INSTALLER_VERSION break down
+    QT_PREFIX="qt.qt"$MAJOR.${MAJOR}${MINOR}${PATCH}.
+    echo Qt Version $INSTALLER_VERSION breakdown
     echo Major 
     echo $MAJOR
     echo Minor
