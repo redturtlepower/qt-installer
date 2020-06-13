@@ -116,7 +116,7 @@ if [ -z "$INSTALLDIR" ]; then
         ;;
       solaris*) echo "SOLARIS" ;;
       bsd*) echo "BSD" ;;
-      *) echo "unknown OSTYPE when setting default install dir: $OSTYPE" ;;
+      *) echo "unknown OSTYPE when setting default install dir: OSTYPE=$OSTYPE" ;;
     esac
     echo "Installing into default directory:" $INSTALLDIR
 fi
@@ -142,7 +142,7 @@ else
             ;;
           solaris*) echo "SOLARIS" ;;
           bsd*) echo "BSD" ;;
-          *) echo "unknown OSTYPE when setting default installer name: $OSTYPE" ;;
+          *) echo "unknown OSTYPE when setting default installer name: OSTYPE=$OSTYPE" ;;
         esac
     else
         :
@@ -200,9 +200,7 @@ else
     exit 0;
 fi
 
-ls -la
 bash maybe-download-installer.sh $INSTALLER_DIR $INSTALLER_NAME $ARCHIVE_URL $INSTALL_VERSION 
-echo The installer file should be available now.
 
 if [ -z $ONLY_DOWNLOAD ]; then
     :
@@ -236,7 +234,25 @@ if [ -f $INSTALLER_DIR/$INSTALLER_NAME ]; then
         ;;
       solaris*) echo "SOLARIS" ;;
       bsd*) echo "BSD" ;;
-      *)
+      *) 
+        echo "unknown OSTYPE when installing: OSTYPE=$OSTYPE. Trying fallback method 'uname'." 
+        # Fallback
+        case "$uname" in
+          linux*)
+            chmod +x $INSTALLER_DIR/$INSTALLER_NAME
+            echo Installing on Linux.
+            ls -la $INSTALLER_DIR
+            export QT_QPA_PLATFORM=minimal
+            #installer_log=$($INSTALLER_DIR/$INSTALLER_NAME --script control-script.qs --verbose --silent -platform minimal);
+            installer_log=$($INSTALLER_DIR/$INSTALLER_NAME --script control-script.qs --verbose);
+            ;;
+          mingw*)
+            QT_QPA_PLATFORM=windows
+            installer_log=$($INSTALLER_DIR/$INSTALLER_NAME --script control-script.qs --verbose --silent);
+            ;;
+          *) echo The OS could not be determined. The installation was not started.
+        esac
+        ;;
     esac
 else
     echo "Did not find the qt installer in the directory" $INSTALLER_DIR
