@@ -103,6 +103,7 @@ done
 
 if [ -z "$INSTALLDIR" ]; then
     # No installation directory specified. Select default directory
+    echo 
     case "$OSTYPE" in
       darwin*)
         INSTALLDIR=/Users/${USER}/Qt${INSTALL_VERSION}
@@ -115,9 +116,9 @@ if [ -z "$INSTALLDIR" ]; then
         ;;
       solaris*) echo "SOLARIS" ;;
       bsd*) echo "BSD" ;;
-      *) echo "unknown OSTYPE: $OSTYPE" ;;
+      *) echo "unknown OSTYPE when setting default install dir: $OSTYPE" ;;
     esac
-    echo "Installing into default directory" $INSTALLDIR
+    echo "Installing into default directory:" $INSTALLDIR
 fi
 
 # Maybe select a default installer name
@@ -141,7 +142,7 @@ else
             ;;
           solaris*) echo "SOLARIS" ;;
           bsd*) echo "BSD" ;;
-          *) echo "unknown: $OSTYPE" ;;
+          *) echo "unknown OSTYPE when setting default installer name: $OSTYPE" ;;
         esac
     else
         :
@@ -200,10 +201,12 @@ else
 fi
 
 source ./maybe-download-installer.sh $INSTALLER_DIR $INSTALLER_NAME $ARCHIVE_URL $INSTALL_VERSION 
+echo The installer file should be available now.
 
 if [ -z $ONLY_DOWNLOAD ]; then
     :
 else
+    echo Finished downloading the installer. Exit 0.
     exit 0; # We don't want to install; we just downloaded the file (in case it did not exist). Exit.
 fi
 
