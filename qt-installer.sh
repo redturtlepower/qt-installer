@@ -258,7 +258,28 @@ if [ -z "$LIST_PACKAGES" ]; then
     fi
 else
     # Packages have been extracted. Write them to a file.
-    
+
+    # This was tested under Ubuntu 18.04 and works:
+
+    # Replace \r with \n
+	tr '\r' '\n' < $INSTALLER_DIR/installer_log.txt > $INSTALLER_DIR/installer_log_lf.txt
+
+	# Split at space
+	sed 's/ /\n/g' < $INSTALLER_DIR/installer_log_lf.txt > ${INSTALLER_DIR}/temp.txt
+
+	pkgfile=${INSTALLER_DIR}/${INSTALLER_NAME}.available_packages.txt
+	cat ${INSTALLER_DIR}/temp.txt | grep "^qt.*" > $pkgfile
+
+	# Sort alphabetically
+	sort -o ${pkgfile} ${pkgfile}
+
+	echo Packages:
+	cat ${pkgfile}
+
+	exit 0
+
+	# OLD CODE: Did not work on Linux. To be tested under windows!
+
     # Replace \r with \n
     tr '\r' '\n' < $INSTALLER_DIR/installer_log.txt > $INSTALLER_DIR/installer_log_lf.txt
     # Extract the 2nd last line that contains a list of all packages: extract last 2 lines, keep only 1st of those 2
