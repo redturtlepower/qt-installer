@@ -237,7 +237,7 @@ if [ -f $INSTALLER_DIR/$INSTALLER_NAME ]; then
       *) 
         echo "unknown OSTYPE when installing: OSTYPE=$OSTYPE. Trying fallback method 'uname'." 
         # Fallback
-        case "$uname" in
+        case "uname" in
           linux*)
             chmod +x $INSTALLER_DIR/$INSTALLER_NAME
             echo Installing on Linux.
