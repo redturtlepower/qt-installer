@@ -206,7 +206,7 @@ bash maybe-download-installer.sh $INSTALLER_DIR $INSTALLER_NAME $ARCHIVE_URL $IN
 if [ -z $ONLY_DOWNLOAD ]; then
     : 
 else
-    exit 1; # We don't want to install; we just downloaded the file (in case it did not exist). Exit.
+    exit 0; # We don't want to install; we just downloaded the file (in case it did not exist). Exit.
 fi
 
 # If no credentials provided, ask the user for input.
@@ -217,17 +217,17 @@ if [ -z "$QT_INSTALLER_LOGIN_MAIL" ] || [ -z "$QT_INSTALLER_LOGIN_PW" ]; then
 fi
 
 if [ -f $INSTALLER_DIR/$INSTALLER_NAME ]; then
-    case "$OSTYPE" in    
+    case "$OSTYPE" in
       darwin*)
-        ;; 
+        ;;
       linux*)
         chmod +x $INSTALLER_DIR/$INSTALLER_NAME
-		echo Installing on Linux.
-		ls -la $INSTALLER_DIR
+	    echo Installing on Linux.
+	    ls -la $INSTALLER_DIR
         QT_QPA_PLATFORM=minimal
         #installer_log=$($INSTALLER_DIR/$INSTALLER_NAME --script control-script.qs --verbose --silent -platform minimal);
-		#installer_log=$($INSTALLER_DIR/$INSTALLER_NAME --script control-script.qs --verbose);
-		$INSTALLER_DIR/$INSTALLER_NAME --script control-script.qs --verbose
+	    installer_log=$($INSTALLER_DIR/$INSTALLER_NAME --script control-script.qs --verbose);
+	    #$INSTALLER_DIR/$INSTALLER_NAME --script control-script.qs --verbose
         ;;
       msys*)
         QT_QPA_PLATFORM=windows
