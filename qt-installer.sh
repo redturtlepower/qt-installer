@@ -263,21 +263,21 @@ else
     # This was tested under Ubuntu 18.04 and works:
 
     # Replace \r with \n
-	tr '\r' '\n' < $INSTALLER_DIR/installer_log.txt > $INSTALLER_DIR/installer_log_lf.txt
+    tr '\r' '\n' < $INSTALLER_DIR/installer_log.txt > $INSTALLER_DIR/installer_log_lf.txt
 
-	# Split at space
-	sed 's/ /\n/g' < $INSTALLER_DIR/installer_log_lf.txt > ${INSTALLER_DIR}/temp.txt
+    # Split at space
+    sed 's/ /\n/g' < $INSTALLER_DIR/installer_log_lf.txt > ${INSTALLER_DIR}/temp.txt
 
-	pkgfile=${INSTALLER_DIR}/${INSTALLER_NAME}.available_packages.txt
-	cat ${INSTALLER_DIR}/temp.txt | grep "^qt.*" > $pkgfile
+    pkgfile=${INSTALLER_DIR}/${INSTALLER_NAME}.available_packages.txt
+    cat ${INSTALLER_DIR}/temp.txt | grep "^qt.*" > $pkgfile
 
-	# Sort alphabetically
-	sort -o ${pkgfile} ${pkgfile}
+    # Sort alphabetically
+    sort -o ${pkgfile} ${pkgfile}
 
-	echo Packages:
-	cat ${pkgfile}
+    echo Packages:
+    cat ${pkgfile}
 
-	exit 0
+    exit 0
 
 	# OLD CODE: Did not work on Linux. To be tested under windows!
 
