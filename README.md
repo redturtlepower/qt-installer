@@ -77,7 +77,7 @@ Parameters need to be provided in the format *--parameter=value*, unless the par
 | --username, -u                | Alternative: ENV variable **QT_INSTALLER_LOGIN_MAIL**        |
 | --password                    | Alternative: ENV variable **QT_INSTALLER_LOGIN_PW**          |
 | --archive-url                 | The URL to the download archive of Qt. <br />Defaults to https://download.qt.io/archive/qt/**<br />appended internally** with **/x.yy/x.yy.z/filename** |
-| --target-os                   | Support values are: <darwin|linux|windows> If using this script from docker running in a virtual environment, the script might fail to detect the current operating system. Set this parameter as a fallback mechanism. |
+| --target-os                   | Support values are: <darwin\|linux\|windows> If using this script from docker running in a virtual environment, the script might fail to detect the current operating system. Set this parameter as a fallback mechanism. |
 
 
 # Default Values
@@ -165,6 +165,8 @@ The location of this credentials cache file is written to the console during ins
 | OS      | location                           |
 | ------- | ---------------------------------- |
 | windows | ~/AppData/Roaming/Qt/qtaccount.ini |
-| linux   |                                    |
+| linux   | ~/.local/share/Qt/qtaccount.ini    |
 | osx     |                                    |
+
+
 
