@@ -125,7 +125,7 @@ fi
 if [ -z "$INSTALLDIR" ]; then
     # No installation directory specified. Select default directory
     echo 
-    case "$(TARGET_OS)" in
+    case "$TARGET_OS" in
       darwin|Darwin)
         INSTALLDIR=/Users/${USER}/Qt${INSTALL_VERSION}
         ;;
@@ -151,7 +151,7 @@ else
     # The version is specified
     if [ -z "$INSTALLER_NAME" ] # if the installation file is not specified
     then # Choose default installer names. The version string must be provided.
-        case "$(TARGET_OS)" in
+        case "$TARGET_OS" in
           darwin*)
             INSTALLER_NAME=qt-opensource-mac-x64-${INSTALL_VERSION}.dmg
             ;;
