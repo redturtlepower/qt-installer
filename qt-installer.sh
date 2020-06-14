@@ -279,9 +279,12 @@ if [ -z "$LIST_PACKAGES" ]; then
         : #no-op: the flag has not been set
     else
         echo "Removing unnecessary files and directories from parent directory" $INSTALLDIR
+        echo "Keeping only directory" ${INSTALLDIR}/${INSTALL_VERSION}
         deleted=$(find $INSTALLDIR -mindepth 1 ! -regex "^${INSTALLDIR}/${INSTALL_VERSION}\(/.*\)?")
-        find $INSTALLDIR -mindepth 1 ! -regex "^${INSTALLDIR}/${INSTALL_VERSION}\(/.*\)?" #-delete
-        echo $deleted > deleted.txt
+        #find $INSTALLDIR -mindepth 1 ! -regex "^${INSTALLDIR}/${INSTALL_VERSION}\(/.*\)?" -delete
+        find $INSTALLDIR -mindepth 1 ! -regex "^${INSTALLDIR}/${INSTALL_VERSION}\(/.*\)?" > deleted.txt
+        #echo $deleted > deleted.txt
+        sed -i".bak" 's/ /\n/g' deleted.txt
     fi
 else
     # Packages have been extracted. Write them to a file.
