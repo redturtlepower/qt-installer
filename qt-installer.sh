@@ -280,7 +280,7 @@ if [ -z "$LIST_PACKAGES" ]; then
     else
         echo "Removing unnecessary files and directories from parent directory" $INSTALLDIR
         deleted=$(find $INSTALLDIR -mindepth 1 ! -regex "^${INSTALLDIR}/${INSTALL_VERSION}\(/.*\)?")
-        find $INSTALLDIR -mindepth 1 ! -regex "^${INSTALLDIR}/${INSTALL_VERSION}\(/.*\)?" -delete
+        find $INSTALLDIR -mindepth 1 ! -regex "^${INSTALLDIR}/${INSTALL_VERSION}\(/.*\)?" #-delete
         echo $deleted > deleted.txt
     fi
 else
