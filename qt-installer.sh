@@ -82,6 +82,11 @@ case $i in
     QT_INSTALLER_LOGIN_MAIL="${i#*=}"
     shift # past argument=value
     ;;
+    --target-os=*)
+	TARGET_OS="${i#*=}"
+    echo "Target operating system: " $TARGET_OS
+    shift # past argument=value
+    ;;
     --password=*)
     if [ -z "${QT_INSTALLER_LOGIN_PW}" ]; then
         :
@@ -101,24 +106,40 @@ case $i in
 esac
 done
 
+if [ -z "$TARGET_OS" ]; then
+    # No target operating system specified. Try to detect default.
+    case "$(uname -s)" in
+      darwin*|Darwin*)
+        TARGET_OS=darwin
+        ;;
+      linux*|Linux*)
+        TARGET_OS=linux
+        ;;
+      CYGWIN*|MSYS*|MINGW*)
+        TARGET_OS=windows
+        ;;
+      *) echo "unknown (uname -s) when setting TARGET_OS: (uname -s)=$(uname -s)" ;;
+    esac
+fi
+
 if [ -z "$INSTALLDIR" ]; then
     # No installation directory specified. Select default directory
     echo 
-    case "$OSTYPE" in
-      darwin*)
+    case "$(TARGET_OS)" in
+      darwin|Darwin)
         INSTALLDIR=/Users/${USER}/Qt${INSTALL_VERSION}
         ;;
-      linux*)
+      linux|Linux)
         INSTALLDIR=/home/${USER}/Qt${INSTALL_VERSION}
         ;;
-      msys*)
+      windows|Windows)
         INSTALLDIR=C:/Qt${INSTALL_VERSION}
         ;;
       solaris*) echo "SOLARIS" ;;
       bsd*) echo "BSD" ;;
-      *) echo "unknown OSTYPE when setting default install dir: OSTYPE=$OSTYPE" ;;
+      *) echo "unknown TARGET_OS when setting default install dir: TARGET_OS=$TARGET_OS" ;;
     esac
-    echo "Installing into default directory:" $INSTALLDIR
+    echo "Installing/Downloading into default directory:" $INSTALLDIR
 fi
 
 # Maybe select a default installer name
@@ -130,7 +151,7 @@ else
     # The version is specified
     if [ -z "$INSTALLER_NAME" ] # if the installation file is not specified
     then # Choose default installer names. The version string must be provided.
-        case "$OSTYPE" in
+        case "$(TARGET_OS)" in
           darwin*)
             INSTALLER_NAME=qt-opensource-mac-x64-${INSTALL_VERSION}.dmg
             ;;
@@ -142,8 +163,9 @@ else
             ;;
           solaris*) echo "SOLARIS" ;;
           bsd*) echo "BSD" ;;
-          *) echo "unknown OSTYPE when setting default installer name: OSTYPE=$OSTYPE" ;;
+          *) echo "unknown TARGET_OS when setting default installer name: TARGET_OS=$TARGET_OS" ;;
         esac
+        echo "Using default installer name:" $INSTALLER_NAME
     else
         :
     fi
@@ -217,42 +239,26 @@ if [ -z "$QT_INSTALLER_LOGIN_MAIL" ] || [ -z "$QT_INSTALLER_LOGIN_PW" ]; then
 fi
 
 if [ -f $INSTALLER_DIR/$INSTALLER_NAME ]; then
-    case "$OSTYPE" in
-      darwin*)
+    case "$TARGET_OS" in
+      darwin|Darwin)
+        echo Installing on Darwin.
         ;;
-      linux*)
-        chmod +x $INSTALLER_DIR/$INSTALLER_NAME
+      linux|Linux)
         echo Installing on Linux.
+        chmod +x $INSTALLER_DIR/$INSTALLER_NAME
         ls -la $INSTALLER_DIR
         export QT_QPA_PLATFORM=minimal
         #installer_log=$($INSTALLER_DIR/$INSTALLER_NAME --script control-script.qs --verbose --silent -platform minimal);
         installer_log=$($INSTALLER_DIR/$INSTALLER_NAME --script control-script.qs --verbose);
         ;;
-      msys*)
-        QT_QPA_PLATFORM=windows
+      windows|Windows)
+        echo Installing on Windows.
+        export QT_QPA_PLATFORM=windows
         installer_log=$($INSTALLER_DIR/$INSTALLER_NAME --script control-script.qs --verbose --silent);
         ;;
       solaris*) echo "SOLARIS" ;;
       bsd*) echo "BSD" ;;
-      *) 
-        echo "unknown OSTYPE when installing: OSTYPE=$OSTYPE. Trying fallback method 'uname'." 
-        # Fallback
-        case "uname" in
-          linux*)
-            chmod +x $INSTALLER_DIR/$INSTALLER_NAME
-            echo Installing on Linux.
-            ls -la $INSTALLER_DIR
-            export QT_QPA_PLATFORM=minimal
-            #installer_log=$($INSTALLER_DIR/$INSTALLER_NAME --script control-script.qs --verbose --silent -platform minimal);
-            installer_log=$($INSTALLER_DIR/$INSTALLER_NAME --script control-script.qs --verbose);
-            ;;
-          mingw*)
-            QT_QPA_PLATFORM=windows
-            installer_log=$($INSTALLER_DIR/$INSTALLER_NAME --script control-script.qs --verbose --silent);
-            ;;
-          *) echo The OS could not be determined. The installation was not started.
-        esac
-        ;;
+      *) echo "unknown TARGET_OS when installing: TARGET_OS=$TARGET_OS. The installation was not started." 
     esac
 else
     echo "Did not find the qt installer in the directory" $INSTALLER_DIR
