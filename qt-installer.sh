@@ -249,7 +249,7 @@ if [ -f $INSTALLER_DIR/$INSTALLER_NAME ]; then
         ls -la $INSTALLER_DIR
         export QT_QPA_PLATFORM=minimal
         #installer_log=$($INSTALLER_DIR/$INSTALLER_NAME --script control-script.qs --verbose --silent -platform minimal);
-        installer_log=$($INSTALLER_DIR/$INSTALLER_NAME --script control-script.qs --verbose);
+        installer_log=$($INSTALLER_DIR/$INSTALLER_NAME --script control-script.qs --verbose --silent);
         ;;
       windows|Windows)
         echo Installing on Windows.
