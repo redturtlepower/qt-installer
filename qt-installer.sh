@@ -68,7 +68,7 @@ case $i in
     echo "Download archive url: " $ARCHIVE_URL
     shift # past argument=value
     ;;
-    --only-download=*)
+    --only-download)
     ONLY_DOWNLOAD=1
     echo "Task: Only download, don't install."
     shift # past argument=value
