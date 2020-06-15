@@ -124,7 +124,7 @@ if [ -z "$TARGET_OS" ]; then
     esac
 fi
 
-if [ -z "$INSTALLDIR" ]; then
+if [ -z "$ONLY_DOWNLOAD" ] && [ -z "$INSTALLDIR" ]; then
     # No installation directory specified. Select default directory
     echo 
     case "$TARGET_OS" in
@@ -141,7 +141,7 @@ if [ -z "$INSTALLDIR" ]; then
       bsd*) echo "BSD" ;;
       *) echo "unknown TARGET_OS when setting default install dir: TARGET_OS=$TARGET_OS" ;;
     esac
-    echo "Installing/Downloading into default directory:" $INSTALLDIR
+    echo "Installing into default directory:" $INSTALLDIR
 fi
 
 # Maybe select a default installer name
