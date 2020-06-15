@@ -80,6 +80,7 @@ case $i in
         echo "Warning: Overwriting qt login email from system environment"
     fi
     QT_INSTALLER_LOGIN_MAIL="${i#*=}"
+    echo "Using Qt login mail from parameter"
     shift # past argument=value
     ;;
     --target-os=*)
@@ -94,6 +95,7 @@ case $i in
         echo "Warning: Overwriting qt login password from system environment"
     fi
     QT_INSTALLER_LOGIN_PW="${i#*=}"
+    echo "Using Qt login password from parameter"
     shift # past argument=value
     ;;
     --default)
