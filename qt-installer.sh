@@ -173,6 +173,16 @@ else
     fi
 fi
 
+if [ -z $ONLY_DOWNLOAD ]; then
+    # If no credentials provided, ask the user for input. 
+    # Here: the flag '--only-download' is NOT set. The task (install or list packages) requires credentials.
+    if [ -z "$QT_INSTALLER_LOGIN_MAIL" ] || [ -z "$QT_INSTALLER_LOGIN_PW" ]; then
+        echo The installer requires to log in to Qt. Internet connection required! Please provide your login details.
+        read -p 'Qt login username: ' QT_INSTALLER_LOGIN_MAIL
+        read -sp 'Qt login password: ' QT_INSTALLER_LOGIN_PW
+    fi
+fi
+
 # Make variables available to the controller script 'control-script.qs'
 export QT_LIST_PACKAGES=$LIST_PACKAGES
 export QT_INSTALL_PACKAGES="$INSTALL_PACKAGES"
@@ -227,13 +237,7 @@ fi
 bash maybe-download-installer.sh $INSTALLER_DIR $INSTALLER_NAME $ARCHIVE_URL $INSTALL_VERSION 
 
 if [ -z $ONLY_DOWNLOAD ]; then
-    # If no credentials provided, ask the user for input. 
-    # Here: the flag '--only-download' is NOT set. The task (install or list packages) requires credentials.
-    if [ -z "$QT_INSTALLER_LOGIN_MAIL" ] || [ -z "$QT_INSTALLER_LOGIN_PW" ]; then
-        echo The installer requires to log in to Qt. Internet connection required! Please provide your login details.
-        read -p 'Qt login username: ' QT_INSTALLER_LOGIN_MAIL
-        read -sp 'Qt login password: ' QT_INSTALLER_LOGIN_PW
-    fi
+    :
 else
     echo Finished downloading the installer. Exit 0.
     exit 0; # We don't want to install; we just downloaded the file (in case it did not exist). Exit.
