@@ -1,3 +1,10 @@
+var status = {
+    widget: null,
+    finishedPageVisible: false,
+    installationFinished: false,
+    loginPageCount: 0
+}
+
 function abortInstaller()
 {
     installer.setDefaultPageVisible(QInstaller.Introduction, false);
@@ -36,22 +43,8 @@ function printObject(object) {
     log(lines.join(","));
 }
 
-var status = {
-    widget: null,
-    finishedPageVisible: false,
-    installationFinished: false
-}
-
-// Question for tracking usage data, refuse it
-Controller.prototype.DynamicTelemetryPluginFormCallback = function() {
-    logCurrentPage()
-    console.log(Object.keys(page().TelemetryPluginForm.statisticGroupBox))
-    var radioButtons = page().TelemetryPluginForm.statisticGroupBox
-    radioButtons.disableStatisticRadioButton.checked = true
-    proceed()
-}
-
-function tryFinish() {
+function tryFinish()
+{
     if (status.finishedPageVisible && status.installationFinished) {
         if (status.widget.RunItCheckBox) {
             status.widget.RunItCheckBox.setChecked(false);
@@ -61,36 +54,60 @@ function tryFinish() {
     }
 }
 
-function Controller() {
+function Controller()
+{
     log("Controller");
     installer.installationFinished.connect(function() {
         status.installationFinished = true;
         gui.clickButton(buttons.NextButton, 3000);
         tryFinish();
     });
+    installer.autoRejectMessageBoxes;
     installer.setMessageBoxAutomaticAnswer("OverwriteTargetDirectory", QMessageBox.Yes);
+    installer.setMessageBoxAutomaticAnswer("installationError", QMessageBox.OK);
     installer.setMessageBoxAutomaticAnswer("installationErrorWithRetry", QMessageBox.Ignore);
-
+    installer.setMessageBoxAutomaticAnswer("AuthorizationError", QMessageBox.OK);
+    installer.setMessageBoxAutomaticAnswer("OperationDoesNotExistError", QMessageBox.Ignore);
+    installer.setMessageBoxAutomaticAnswer("isAutoDependOnError", QMessageBox.OK);
+    installer.setMessageBoxAutomaticAnswer("isDefaultError", QMessageBox.OK);
+    installer.setMessageBoxAutomaticAnswer("ElevationError", QMessageBox.OK);
+    installer.setMessageBoxAutomaticAnswer("Error", QMessageBox.OK);
+    installer.setMessageBoxAutomaticAnswer("stopProcessesForUpdates", QMessageBox.Ignore);
+    installer.setMessageBoxAutomaticAnswer("TargetDirectoryInUses", QMessageBox.No);
+    installer.setMessageBoxAutomaticAnswer("AlreadyRunning", QMessageBox.OK);
+    
     // Allow to cancel installation for arguments --list-packages
     installer.setMessageBoxAutomaticAnswer("cancelInstallation", QMessageBox.Yes);
 }
 
+// Question for tracking usage data, refuse it
+Controller.prototype.DynamicTelemetryPluginFormCallback = function()
+{
+    //logCurrentPage()
+    log("Telemetry Plugin Form Page");
+    console.log(Object.keys(page().TelemetryPluginForm.statisticGroupBox))
+    var radioButtons = page().TelemetryPluginForm.statisticGroupBox
+    radioButtons.disableStatisticRadioButton.checked = true
+    proceed()
+}
+
 Controller.prototype.ObligationsPageCallback = function()
 {
-    log("Obligations Menu Page")
+    log("Obligations Menu Page");
     var page = gui.pageWidgetByObjectName("ObligationsPage");
     page.obligationsAgreement.setChecked(true);
     page.completeChanged();
-    gui.clickButton(buttons.NextButton);
+    gui.clickButton(buttons.NextButton, 3000);
 }
 
 Controller.prototype.StartMenuDirectoryPageCallback = function()
 {
-    log("Start Menu Page")
-    gui.clickButton(buttons.NextButton);
+    log("Start Menu Page");
+    gui.clickButton(buttons.NextButton, 3000);
 }
 
-Controller.prototype.WelcomePageCallback = function() {
+Controller.prototype.WelcomePageCallback = function()
+{
     log("Welcome Page");
     gui.clickButton(buttons.NextButton, 3000);
 
@@ -101,9 +118,9 @@ Controller.prototype.WelcomePageCallback = function() {
     });
 }
 
-Controller.prototype.CredentialsPageCallback = function() {
-    log("Credentials Page")
-
+Controller.prototype.CredentialsPageCallback = function()
+{
+    log("Credentials Page");
     var login = installer.environmentVariable("QT_INSTALLER_LOGIN_MAIL");
     var password = installer.environmentVariable("QT_INSTALLER_LOGIN_PW");
 
@@ -116,17 +133,26 @@ Controller.prototype.CredentialsPageCallback = function() {
         log("Please provide the qt login password via ENV 'QT_INSTALLER_LOGIN_PW!");
     }
 
-    if (login === "" || password === "") {
-        gui.clickButton(buttons.CommitButton);
-    }
+    //if (login === "" || password === "") {
+    //    gui.clickButton(buttons.CommitButton, 3000);
+    //}
 
     var widget = gui.currentPageWidget();
     widget.loginWidget.EmailLineEdit.setText(login);
     widget.loginWidget.PasswordLineEdit.setText(password);
 
-    gui.clickButton(buttons.CommitButton);
+    // Testing the automated instasll on Ubuntu VBox with wine, the login does not work despite correct credentials.
+    // Move back with the button once, then the script will go forward afterwards.
+    if (status.loginPageCount==0){
+        status.loginPageCount=1;
+        gui.clickButton(buttons.BackButton, 3000);
+    }
+    
+    gui.clickButton(buttons.CommitButton, 3000);
 }
-Controller.prototype.ComponentSelectionPageCallback = function() {
+
+Controller.prototype.ComponentSelectionPageCallback = function()
+{
     log("ComponentSelectionPageCallback");
 
     function list_packages() {
@@ -167,10 +193,11 @@ Controller.prototype.ComponentSelectionPageCallback = function() {
     }
 
     //widget.selectAll();
-    gui.clickButton(buttons.NextButton);
+    gui.clickButton(buttons.NextButton, 3000);
 }
 
-Controller.prototype.IntroductionPageCallback = function() {
+Controller.prototype.IntroductionPageCallback = function()
+{
     log("Introduction Page");
     log("Retrieving meta information from remote repository");
 
@@ -184,7 +211,8 @@ Controller.prototype.IntroductionPageCallback = function() {
     }
 }
 
-Controller.prototype.TargetDirectoryPageCallback = function() {
+Controller.prototype.TargetDirectoryPageCallback = function()
+{
     log("Target Directory Page");
     var version = installer.value("ProductVersion");
     var widget = gui.currentPageWidget();
@@ -195,10 +223,11 @@ Controller.prototype.TargetDirectoryPageCallback = function() {
         log("Set target installation dir: "+widget.TargetDirectoryLineEdit.text);
     }
 
-    gui.clickButton(buttons.NextButton);
+    gui.clickButton(buttons.NextButton, 3000);
 }
 
-Controller.prototype.LicenseAgreementPageCallback = function() {
+Controller.prototype.LicenseAgreementPageCallback = function()
+{
     log("Accept license agreement");
     var widget = gui.currentPageWidget();
 
@@ -208,17 +237,21 @@ Controller.prototype.LicenseAgreementPageCallback = function() {
 
     gui.clickButton(buttons.NextButton);
 }
-Controller.prototype.ReadyForInstallationPageCallback = function() {
+
+Controller.prototype.ReadyForInstallationPageCallback = function()
+{
     log("Ready to install");
-    gui.clickButton(buttons.CommitButton);
+    gui.clickButton(buttons.CommitButton, 3000);
 }
 
-Controller.prototype.PerformInstallationPageCallback = function() {
+Controller.prototype.PerformInstallationPageCallback = function()
+{
     log("PerformInstallationPageCallback");
-    gui.clickButton(buttons.CommitButton);
+    gui.clickButton(buttons.CommitButton, 3000);
 }
 
-Controller.prototype.FinishedPageCallback = function() {
+Controller.prototype.FinishedPageCallback = function()
+{
     log("FinishedPageCallback");
 
     var widget = gui.currentPageWidget();
