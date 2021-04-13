@@ -192,7 +192,7 @@ Controller.prototype.ComponentSelectionPageCallback = function()
        log("Use default package list");
     }
 
-    //widget.selectAll();
+    widget.selectAll();
     gui.clickButton(buttons.NextButton, 3000);
 }
 
